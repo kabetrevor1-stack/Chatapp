@@ -6,13 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Uses the exact test data specified in the assignment brief, since the
- * brief states this data will be used for marking.
- */
+// These tests use the exact test data given in the assignment brief,
+// since the brief says this data will be used for marking.
 class LoginTest {
 
-    // ---------- checkUserName() : assertTrue / assertFalse ----------
+    // ---------- checkUserName() ----------
 
     @Test
     void checkUserName_correctlyFormatted_returnsTrue() {
@@ -27,7 +25,7 @@ class LoginTest {
         assertFalse(login.checkUserName());
     }
 
-    // ---------- checkPasswordComplexity() : assertTrue / assertFalse ----------
+    // ---------- checkPasswordComplexity() ----------
 
     @Test
     void checkPasswordComplexity_meetsRequirements_returnsTrue() {
@@ -41,7 +39,7 @@ class LoginTest {
         assertFalse(login.checkPasswordComplexity());
     }
 
-    // ---------- checkCellPhoneNumber() : assertTrue / assertFalse ----------
+    // ---------- checkCellPhoneNumber() ----------
 
     @Test
     void checkCellPhoneNumber_correctlyFormatted_returnsTrue() {
@@ -56,7 +54,7 @@ class LoginTest {
         assertFalse(login.checkCellPhoneNumber());
     }
 
-    // ---------- registerUser() : assertEquals, exact brief wording ----------
+    // ---------- registerUser() ----------
 
     @Test
     void registerUser_usernameIncorrectlyFormatted_returnsUsernameMessage() {
@@ -95,7 +93,7 @@ class LoginTest {
                 login.registerUser());
     }
 
-    // ---------- loginUser() / returnLoginStatus() : assertTrue/False and assertEquals ----------
+    // ---------- loginUser() / returnLoginStatus() ----------
 
     @Test
     void loginUser_correctCredentials_returnsTrue() {
@@ -111,10 +109,6 @@ class LoginTest {
 
     @Test
     void returnLoginStatus_correctCredentials_returnsWelcomeMessage() {
-        // NOTE: "Kyle"/"Peterson" are placeholder values I chose - the brief
-        // never gives an official first/last name test value, only "kyl_1"
-        // for the username. Confirm the exact expected string with your
-        // module guide or lecturer before relying on this specific test.
         Login login = new Login("ktk_1", "Ch&&sec@ke99!", "+27838968976", "Trevor", "Kabe");
         assertEquals("Welcome Trevor, Kabe it is great to see you again.",
                 login.returnLoginStatus("ktk_1", "Ch&&sec@ke99!"));
