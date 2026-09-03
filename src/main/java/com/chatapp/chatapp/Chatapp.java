@@ -1,13 +1,10 @@
 package com.chatapp.chatapp;
 
 import com.chatapp.chatapp.auth.Login;
-
 import java.util.Scanner;
 
-/**
- * Console entry point for the Chat App.
- * Part 1: presents a menu to register a user, then log in, then quit.
- */
+// Console entry point for the Chat App.
+// Part 1: shows a menu to register a user, then log in, then quit.
 public class Chatapp {
 
     public static void main(String[] args) {
@@ -17,7 +14,7 @@ public class Chatapp {
 
         System.out.println("=== Chat App - Part 1: Registration and Login ===");
 
-        // Main menu loop - keeps showing options until the user chooses to quit
+        // Keep showing the menu until the user chooses to quit
         while (running) {
             System.out.println();
             System.out.println("1. Register");
@@ -45,13 +42,9 @@ public class Chatapp {
         scanner.close();
     }
 
-    /**
-     * Prompts for username, password, and cell phone number, then attempts
-     * to register the user via the Login class.
-     *
-     * @param scanner shared Scanner for console input
-     * @return the newly registered Login object, or null if registration failed
-     */
+    // Asks for username, password, and cell phone number, then tries to
+    // register the user. Returns the new Login object if it worked, or
+    // null if one of the checks failed.
     private static Login handleRegistration(Scanner scanner) {
         System.out.println("--- Register ---");
 
@@ -74,21 +67,20 @@ public class Chatapp {
         String result = newUser.registerUser();
         System.out.println(result);
 
-        // Only return the user as "registered" if every check actually passed
+        // Only treat the user as registered if every check actually passed
         boolean success = newUser.checkUserName()
                 && newUser.checkPasswordComplexity()
                 && newUser.checkCellPhoneNumber();
 
-        return success ? newUser : null;
+        if (success) {
+            return newUser;
+        } else {
+            return null;
+        }
     }
 
-    /**
-     * Prompts for login credentials and checks them against the currently
-     * registered user, if one exists.
-     *
-     * @param scanner        shared Scanner for console input
-     * @param registeredUser the account created during registration, or null
-     */
+    // Asks for login details and checks them against the account that was
+    // registered earlier, if there is one.
     private static void handleLogin(Scanner scanner, Login registeredUser) {
         System.out.println("--- Login ---");
 
