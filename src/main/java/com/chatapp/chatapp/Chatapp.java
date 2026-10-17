@@ -4,15 +4,17 @@ import com.chatapp.chatapp.auth.Login;
 import java.util.Scanner;
 
 // Console entry point for the Chat App.
-// Part 1: shows a menu to register a user, then log in, then quit.
+// Part 1: register and log in.
+// Part 2: after a successful login the user is taken to QuickChat.
 public class Chatapp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Login registeredUser = null; // holds the account once registration succeeds
+        Login registeredUser = null; // will hold the account details once registered
+        boolean userIsRegistered = false; // true once someone has registered successfully
         boolean running = true;
 
-        System.out.println("=== Chat App - Part 1: Registration and Login ===");
+        System.out.println("=== Chat App ===");
 
         // Keep showing the menu until the user chooses to quit
         while (running) {
@@ -25,10 +27,20 @@ public class Chatapp {
 
             switch (choice) {
                 case "1":
-                    registeredUser = handleRegistration(scanner);
+                    Login newUser = handleRegistration(scanner);
+                    if (newUser != null) {
+                        registeredUser = newUser;
+                        userIsRegistered = true;
+                    }
                     break;
                 case "2":
-                    handleLogin(scanner, registeredUser);
+                    boolean loginSuccessful = handleLogin(scanner, registeredUser, userIsRegistered);
+                    // Messages can only be sent after a successful login
+                    if (loginSuccessful) {
+                        QuickChat.run(scanner);
+                        running = false;
+                        System.out.println("Goodbye!");
+                    }
                     break;
                 case "3":
                     running = false;
@@ -64,8 +76,7 @@ public class Chatapp {
         String lastName = scanner.nextLine().trim();
 
         Login newUser = new Login(username, password, cellPhoneNumber, firstName, lastName);
-        String result = newUser.registerUser();
-        System.out.println(result);
+        System.out.println(newUser.registerUser());
 
         // Only treat the user as registered if every check actually passed
         boolean success = newUser.checkUserName()
@@ -80,13 +91,13 @@ public class Chatapp {
     }
 
     // Asks for login details and checks them against the account that was
-    // registered earlier, if there is one.
-    private static void handleLogin(Scanner scanner, Login registeredUser) {
+    // registered earlier, if there is one. Returns true if the login worked.
+    private static boolean handleLogin(Scanner scanner, Login registeredUser, boolean userIsRegistered) {
         System.out.println("--- Login ---");
 
-        if (registeredUser == null) {
+        if (!userIsRegistered) {
             System.out.println("No user is registered yet. Please register first.");
-            return;
+            return false;
         }
 
         System.out.print("Username: ");
@@ -95,7 +106,8 @@ public class Chatapp {
         System.out.print("Password: ");
         String enteredPassword = scanner.nextLine().trim();
 
-        String status = registeredUser.returnLoginStatus(enteredUsername, enteredPassword);
-        System.out.println(status);
+        boolean loginSuccessful = registeredUser.loginUser(enteredUsername, enteredPassword);
+        System.out.println(registeredUser.returnLoginStatus(enteredUsername, enteredPassword));
+        return loginSuccessful;
     }
 }
