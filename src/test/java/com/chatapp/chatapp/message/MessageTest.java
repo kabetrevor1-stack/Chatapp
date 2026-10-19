@@ -19,9 +19,9 @@ class MessageTest {
 
     // Test data for message 1 and message 2
     private static final String RECIPIENT_1 = "+27718693002";
-    private static final String TEXT_1 = "Hi Mike, can you join us for dinner tonight?";
+    private static final String TEXT_1 = "Hi Trevor, can you join us for dinner tonight?";
     private static final String RECIPIENT_2 = "08575975889";
-    private static final String TEXT_2 = "Hi Keegan, did you receive the payment?";
+    private static final String TEXT_2 = "Hi Kabe, did you receive the payment?";
 
     // Start every test with an empty list and a total of 0
     @BeforeEach
@@ -85,7 +85,7 @@ class MessageTest {
 
     @Test
     void createMessageHash_briefExample_returnsHiThanks() {
-        Message message = new Message(ID_1, 0, RECIPIENT_1, "Hi Mike, thanks");
+        Message message = new Message(ID_1, 0, RECIPIENT_1, "Hi Trevor, thanks");
         assertEquals("00:0:HITHANKS", message.createMessageHash());
     }
 
@@ -188,7 +188,7 @@ class MessageTest {
         String expected = "Message ID: 0012345678\n"
                 + "Message Hash: 00:0:HITONIGHT\n"
                 + "Recipient: +27718693002\n"
-                + "Message: Hi Mike, can you join us for dinner tonight?";
+                + "Message: Hi Trevor, can you join us for dinner tonight?";
         assertEquals(expected, message.getMessageDetails());
     }
 
@@ -200,7 +200,7 @@ class MessageTest {
         String expected = "Message ID: 0012345678\n"
                 + "Message Hash: 00:0:HITONIGHT\n"
                 + "Recipient: +27718693002\n"
-                + "Message: Hi Mike, can you join us for dinner tonight?\n\n";
+                + "Message: Hi Trevor, can you join us for dinner tonight?\n\n";
         assertEquals(expected, Message.printMessages());
     }
 
@@ -218,6 +218,6 @@ class MessageTest {
         assertTrue(content.contains("\"messageID\": \"0012345678\""));
         assertTrue(content.contains("\"messageHash\": \"00:0:HITONIGHT\""));
         assertTrue(content.contains("\"recipient\": \"+27718693002\""));
-        assertTrue(content.contains("\"message\": \"Hi Mike, can you join us for dinner tonight?\""));
+        assertTrue(content.contains("\"message\": \"Hi Trevor, can you join us for dinner tonight?\""));
     }
 }
