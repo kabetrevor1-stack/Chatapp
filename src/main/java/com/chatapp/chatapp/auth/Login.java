@@ -20,7 +20,7 @@ public class Login {
 
     // Checks that the username has an underscore and is no more than 5 characters long
     public boolean checkUserName() {
-        if (username.equals(null)) {
+        if (username == null) {
             return false;
         }
         return username.contains("_") && username.length() <= 5;
@@ -57,9 +57,9 @@ public class Login {
 
     // Checks that the cell phone number is in South African international format,
     // e.g. +27838968976
-    // Regex reference: ansman, 2017. South African mobile number regex.
-    // GitHub Issue #235, validate.js project.
-    // Available at: https://github.com/ansman/validate.js/issues/235
+    // Regex reference: validate.js (n.d.) South African mobile number regex.
+    // GitHub issue #235. Available at: https://github.com/ansman/validate.js/issues/235
+    // (Accessed: 10 October 2026). Adapted to require the +27 international code.
     public boolean checkCellPhoneNumber() {
         if (phoneNumber == null) {
             return false;
