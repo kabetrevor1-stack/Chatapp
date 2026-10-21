@@ -13,7 +13,7 @@ This is a console-based Chat Application PoE written in Java.
 
 ## Presentation Videos
 * **Part 1:** https://youtu.be/pt99f30Tm-Q
-* **Part 2:** [add your unlisted YouTube link here]
+* **Part 2:** https://youtu.be/75yLAeLdu_o
 
 ## Features Implemented
 
