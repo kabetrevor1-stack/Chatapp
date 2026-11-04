@@ -201,7 +201,12 @@ public class Message {
     //   (Accessed: 15 October 2026).
     public void storeMessage() {
         storedMessages.add(this);
+        writeStoredMessagesFile();
+    }
 
+    // Writes every message in the stored list to storedMessages.json.
+    // It is also used after a stored message is deleted, so the file stays up to date.
+    private static void writeStoredMessagesFile() {
         String json = "[\n";
         for (int i = 0; i < storedMessages.size(); i++) {
             Message m = storedMessages.get(i);
@@ -228,13 +233,13 @@ public class Message {
     }
 
     // Puts a backslash before quotes, backslashes and tabs so the JSON stays valid
-    private String cleanForJson(String text) {
+    private static String cleanForJson(String text) {
         text = text.replace("\\", "\\\\");
         text = text.replace("\"", "\\\"");
         text = text.replace("\t", "\\t");
         return text;
     }
-
+    
     // Reads storedMessages.json and adds every message in it to the stored arrays.
     // Returns how many messages were loaded. A message that is already in the
     // arrays is skipped, so calling this twice never creates duplicates.
@@ -281,6 +286,130 @@ public class Message {
         }
         return loadedCount;
     }
+    
+        // ---------- Part 3: Stored Messages features ----------
+
+    // The name shown as the sender. The app only has one user, so every message has the same sender.
+    private static String senderName = "You";
+
+    public static void setSenderName(String name) {
+        senderName = name;
+    }
+
+    // 1. Returns the sender and recipient of every stored message
+    public static String getStoredSendersAndRecipients() {
+        String result = "";
+        for (int i = 0; i < allFlags.size(); i++) {
+            if (allFlags.get(i).equals("Stored")) {
+                result = result + "Sender: " + senderName + " | Recipient: " + allRecipients.get(i) + "\n";
+            }
+        }
+        if (result.isEmpty()) {
+            return "No stored messages.";
+        }
+        return result;
+    }
+
+    // 2. Returns the longest stored message (the first one found if two are the same length)
+    public static String getLongestStoredMessage() {
+        String longest = "";
+        for (int i = 0; i < storedMessageTexts.size(); i++) {
+            if (storedMessageTexts.get(i).length() > longest.length()) {
+                longest = storedMessageTexts.get(i);
+            }
+        }
+        if (longest.isEmpty()) {
+            return "No stored messages.";
+        }
+        return longest;
+    }
+
+    // 3. Searches every message for a message ID and returns the recipient and message
+    public static String searchByMessageID(String messageID) {
+        for (int i = 0; i < allMessageIDs.size(); i++) {
+            if (allMessageIDs.get(i).equals(messageID)) {
+                return "Recipient: " + allRecipients.get(i) + "\n"
+                        + "Message: " + allMessageTexts.get(i);
+            }
+        }
+        return "Message ID not found.";
+    }
+
+    // 4. Returns every message that was sent or stored for one recipient.
+    // Disregarded messages are left out because they were never sent or stored.
+    public static ArrayList<String> searchByRecipient(String recipientNumber) {
+        ArrayList<String> found = new ArrayList<>();
+        for (int i = 0; i < allRecipients.size(); i++) {
+            if (allRecipients.get(i).equals(recipientNumber) && !allFlags.get(i).equals("Disregard")) {
+                found.add(allMessageTexts.get(i));
+            }
+        }
+        return found;
+    }
+
+    // 5. Deletes a message using its hash. The message is removed from every
+    // array, and from the JSON file if it was a stored message.
+    public static String deleteByHash(String hash) {
+        int position = allMessageHashes.indexOf(hash);
+        if (position == -1) {
+            return "Message hash not found.";
+        }
+
+        // Read the details before removing them (the parallel arrays share the same position)
+        String id = allMessageIDs.get(position);
+        String text = allMessageTexts.get(position);
+        String flag = allFlags.get(position);
+
+        // Remove from the message array that matches the flag
+        if (flag.equals("Sent")) {
+            sentMessageTexts.remove(text);
+            removeFromMessageList(sentMessages, id);
+        } else if (flag.equals("Disregard")) {
+            disregardedMessageTexts.remove(text);
+        } else {
+            storedMessageTexts.remove(text);
+            removeFromMessageList(storedMessages, id);
+            writeStoredMessagesFile();
+        }
+
+        // Remove from the parallel arrays
+        allMessageIDs.remove(position);
+        allMessageHashes.remove(position);
+        allRecipients.remove(position);
+        allMessageTexts.remove(position);
+        allFlags.remove(position);
+
+        return "Message: \"" + text + "\" successfully deleted.";
+    }
+
+    // Removes the message with this ID from a list of Message objects
+    private static void removeFromMessageList(ArrayList<Message> list, String id) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).messageID.equals(id)) {
+                list.remove(i);
+                return;
+            }
+        }
+    }
+
+    // 6. Returns a report with the full details of every message that has this flag
+    // ("Sent", "Stored" or "Disregard").
+    public static String getReport(String flag) {
+        String report = "";
+        for (int i = 0; i < allFlags.size(); i++) {
+            if (allFlags.get(i).equals(flag)) {
+                report = report + "Message ID: " + allMessageIDs.get(i) + "\n"
+                        + "Message Hash: " + allMessageHashes.get(i) + "\n"
+                        + "Recipient: " + allRecipients.get(i) + "\n"
+                        + "Message: " + allMessageTexts.get(i) + "\n\n";
+            }
+        }
+        if (report.isEmpty()) {
+            return "No messages to show.";
+        }
+        return report;
+    }
+    
 
     // Clears the saved lists and the counter (used by the unit tests)
     public static void resetMessages() {
