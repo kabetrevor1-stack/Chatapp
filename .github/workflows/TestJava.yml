@@ -22,6 +22,7 @@ jobs:
           java-version: '26'
           cache: maven
 
-      # Runs every test class, so LoginTest and MessageTest both run
-      - name: Run unit tests with Maven
+      # Runs every test class in src/test: LoginTest (Part 1), MessageTest (Part 2)
+      # and StoredMessagesTest (Part 3). Maven also downloads Gson for the JSON reader.
+      - name: Run all unit tests (Parts 1 to 3) with Maven
         run: mvn --batch-mode test

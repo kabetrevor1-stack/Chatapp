@@ -220,4 +220,35 @@ class MessageTest {
         assertTrue(content.contains("\"recipient\": \"+27718693002\""));
         assertTrue(content.contains("\"message\": \"Hi Trevor, can you join us for dinner tonight?\""));
     }
+    
+    // ---------- Reading the JSON file (Part 3) ----------
+
+    // Store two messages, clear the program's memory, then read the file back in
+    @Test
+    void loadStoredMessages_readsStoredMessagesFromJsonFile() {
+        Message message1 = new Message(ID_1, 0, RECIPIENT_1, TEXT_1);
+        Message message2 = new Message(ID_2, 1, RECIPIENT_2, TEXT_2);
+        message1.sentMessage(3);
+        message2.sentMessage(3);
+
+        // Clear everything in memory so only the file still has the messages
+        Message.resetMessages();
+        int loaded = Message.loadStoredMessages();
+
+        assertEquals(2, loaded);
+        assertEquals(2, Message.getStoredMessageTexts().size());
+        assertEquals(TEXT_1, Message.getStoredMessageTexts().get(0));
+        assertEquals(TEXT_2, Message.getStoredMessageTexts().get(1));
+        assertEquals("00:0:HITONIGHT", Message.getAllMessageHashes().get(0));
+        assertEquals("00:1:HIPAYMENT", Message.getAllMessageHashes().get(1));
+    }
+
+    // If no message was ever stored there is no file, so nothing is loaded
+    @Test
+    void loadStoredMessages_noFile_returnsZero() {
+        new File("storedMessages.json").delete();
+
+        assertEquals(0, Message.loadStoredMessages());
+        assertEquals(0, Message.getStoredMessageTexts().size());
+    }
 }
