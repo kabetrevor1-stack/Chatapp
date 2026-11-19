@@ -15,7 +15,7 @@ This is a console-based Chat Application PoE written in Java (Maven, JUnit 5).
 ## Presentation Videos
 - **Part 1:** https://youtu.be/pt99f30Tm-Q
 - **Part 2:** https://youtu.be/75yLAeLdu_o
-- **Part 3 (final PoE):** << PASTE PART 3 VIDEO LINK HERE >>
+- **Part 3 (final PoE):** https://youtu.be/DfwL0EsdsMs
 
 ## Features Implemented
 
